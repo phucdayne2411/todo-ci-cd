@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Todo App</title>
+</head>
+<body>
+  <h1>Todo</h1>
+  <input id="todo">
+  <button onclick="add()">Add</button>
+  <ul id="list"></ul>
+
+<script>
+const API = "https://YOUR_RENDER_URL/todos";
+
+function load() {
+  fetch(API)
+    .then(res => res.json())
+    .then(data => {
+      list.innerHTML = data.map(t => `<li>${t.title}</li>`).join("");
+    });
+}
+
+function add() {
+  fetch(API, {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({ title: todo.value })
+  }).then(load);
+}
+
+load();
+</script>
+</body>
+</html>
