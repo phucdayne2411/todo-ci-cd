@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  # 1. Dịch vụ Backend (be_server)
+  backend:
+    build: 
+      context: ./project-be # Chỉ định vị trí Dockerfile của BE
+    container_name: be_server
+    # Mở cổng 3000 của container ra cổng 3000 của máy cục bộ
+    ports:
+      - "3000:3000"
+    environment:
+      # Đảm bảo Node.js chạy ở chế độ production
+      NODE_ENV: production 
+      PORT: 3000
+
+  # 2. Dịch vụ Frontend (fe_web)
+  frontend:
+    build: 
+      context: ./project-fe # Chỉ định vị trí Dockerfile của FE
+    container_name: fe_web
+    # Mở cổng 80 của container (Nginx) ra cổng 8080 của máy cục bộ
+    # (Để tránh xung đột với các dịch vụ khác trên cổng 80)
+    ports:
+      - "8080:80"
+    # Frontend cần được khởi động sau khi Backend đã sẵn sàng
+    depends_on:
+      - backend
